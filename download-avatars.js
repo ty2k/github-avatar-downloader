@@ -61,8 +61,14 @@ function downloadImageByURL(url, filePath) {
 
 //downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
 
-// Call getRepoContributors function with arguments repoOwner and repoName (from the command line), and a function to log an error and results
-getRepoContributors(repoOwner, repoName, function(err, result) {
-  console.log("Errors:", err);
-  console.log("Result:", result);
+// If either repoOwner or repoName are undefined, throw an error.
+if (repoOwner === undefined || repoName === undefined) {
+  console.log("Need both repo owner and repo name as arguments.");
+  console.log("Use form: node download-avatars.js <repoowner> <reponame>");
+} else {
+  // Call getRepoContributors function with arguments repoOwner and repoName (from the command line), and a function to log an error and results
+  getRepoContributors(repoOwner, repoName, function(err, result) {
+    console.log("Errors:", err);
+    console.log("Result:", result);
 });
+}

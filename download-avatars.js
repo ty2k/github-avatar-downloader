@@ -1,5 +1,6 @@
-// Require request
+// Require request and fs
 var request = require('request');
+var fs = require('fs');
 
 // Say hi to our user
 console.log('Welcome to the GitHub Avatar Downloader!');
@@ -34,6 +35,24 @@ function getRepoContributors(repoOwner, repoName, cb) {
     });
   });
 }
+
+// Using an avatar URL as an input, output to a local file path
+function downloadImageByURL(url, filePath) {
+  // Send a GET request
+  request.get(url)
+       // If there is an error, throw it and exit without crashing
+       .on('error', function (err) {
+         throw err;
+       })
+       // Report the status code of the response
+       .on('response', function (response) {
+         console.log('Response Status Code: ', response.statusCode);
+       })
+       // Pipe the response stream to our file path (avatars/ directory needs to exist first or this won't work)
+       .pipe(fs.createWriteStream(filePath));
+}
+
+downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
 
 // Call getRepoContributors function with arguments jquery (user), jquery (project), and a function to log an error and results
 getRepoContributors("jquery", "jquery", function(err, result) {

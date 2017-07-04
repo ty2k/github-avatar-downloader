@@ -6,6 +6,10 @@ Stream = require('stream').Transform;
 // Say hi to our user
 console.log('Welcome to the GitHub Avatar Downloader!');
 
+// Declare our repoOwner and repoName variables using process.argv command line arguments
+var repoOwner = process.argv[2];
+var repoName = process.argv[3];
+
 // Create getRepoContributors function with arguments repoOwner (user), repoName (project), and the callback function
 function getRepoContributors(repoOwner, repoName, cb) {
   // process.env.GITHUB_USER is any reference to your username; an environmental variable in this case
@@ -57,8 +61,8 @@ function downloadImageByURL(url, filePath) {
 
 //downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
 
-// Call getRepoContributors function with arguments jquery (user), jquery (project), and a function to log an error and results
-getRepoContributors("jquery", "jquery", function(err, result) {
+// Call getRepoContributors function with arguments repoOwner and repoName (from the command line), and a function to log an error and results
+getRepoContributors(repoOwner, repoName, function(err, result) {
   console.log("Errors:", err);
   console.log("Result:", result);
 });

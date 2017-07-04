@@ -1,7 +1,6 @@
 // Require request and fs
 var request = require('request');
 var fs = require('fs');
-Stream = require('stream').Transform;
 
 // Say hi to our user
 console.log('Welcome to the GitHub Avatar Downloader!');
@@ -37,7 +36,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
     data.forEach(function(user) {
       // Log the avatar of their URL
       console.log("Avatar URL for " + user.login + ": " + user.avatar_url);
-      // Use the downloadImageByURL function on the avatar URL, using a string with avatars directory, user.login string, and .png as a file extension
+      // Use the downloadImageByURL function on the avatar URL, using a string with avatars directory, user.login string, and .png as a file path
       downloadImageByURL(user.avatar_url, './avatars/' + user.login + '.png');
     });
   });
@@ -59,8 +58,6 @@ function downloadImageByURL(url, filePath) {
        .pipe(fs.createWriteStream(filePath));
 }
 
-//downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
-
 // If either repoOwner or repoName are undefined, throw an error.
 if (repoOwner === undefined || repoName === undefined) {
   console.log("Need both repo owner and repo name as arguments.");
@@ -70,5 +67,5 @@ if (repoOwner === undefined || repoName === undefined) {
   getRepoContributors(repoOwner, repoName, function(err, result) {
     console.log("Errors:", err);
     console.log("Result:", result);
-});
+  });
 }

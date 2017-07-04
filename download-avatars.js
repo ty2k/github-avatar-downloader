@@ -1,6 +1,7 @@
 // Require request and fs
 var request = require('request');
 var fs = require('fs');
+Stream = require('stream').Transform;
 
 // Say hi to our user
 console.log('Welcome to the GitHub Avatar Downloader!');
@@ -32,6 +33,8 @@ function getRepoContributors(repoOwner, repoName, cb) {
     data.forEach(function(user) {
       // Log the avatar of their URL
       console.log("Avatar URL for " + user.login + ": " + user.avatar_url);
+      // Use the downloadImageByURL function on the avatar URL, using a string with avatars directory, user.login string, and .png as a file extension
+      downloadImageByURL(user.avatar_url, './avatars/' + user.login + '.png');
     });
   });
 }
@@ -52,7 +55,7 @@ function downloadImageByURL(url, filePath) {
        .pipe(fs.createWriteStream(filePath));
 }
 
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
+//downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
 
 // Call getRepoContributors function with arguments jquery (user), jquery (project), and a function to log an error and results
 getRepoContributors("jquery", "jquery", function(err, result) {

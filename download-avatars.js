@@ -21,10 +21,17 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
   // Use request to make an HTTP GET to the generated URL
   request(requestURL, requestOptions, function(err, response, body) {
+    // Exit without crashing if there is an error
     if (err) {
       throw err;
     }
-    console.log('Response body:', response.body);
+    // Parse the JSON data we get as a request response and hold it as an array variable
+    const data = JSON.parse(body);
+    // Each element in the array is a user's metadata. For each user,
+    data.forEach(function(user) {
+      // Log the avatar of their URL
+      console.log("Avatar URL for " + user.login + ": " + user.avatar_url);
+    });
   });
 }
 

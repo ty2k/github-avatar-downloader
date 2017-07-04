@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/ty2k/github-avatar-downloader#readme",
   "dependencies": {
+    "dotenv": "^4.0.0",
     "request": "^2.81.0"
   }
 }

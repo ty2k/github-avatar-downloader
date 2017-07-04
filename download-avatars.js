@@ -1,6 +1,7 @@
-// Require request and fs
+// Require request, fs, and dotenv
 var request = require('request');
 var fs = require('fs');
+var dotenv = require('dotenv').config();
 
 // Say hi to our user
 console.log('Welcome to the GitHub Avatar Downloader!');

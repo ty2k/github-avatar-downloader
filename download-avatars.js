@@ -1,70 +1,62 @@
-// Require request, fs, and dotenv
 var request = require('request');
 var fs = require('fs');
 var dotenv = require('dotenv').config();
 
-// Say hi to our user
-console.log('Welcome to the GitHub Avatar Downloader!');
+// Create the ./avatars directory to save the images if it doesn't exist yet
+var dir = './avatars';
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
 
-// Declare our repoOwner and repoName variables using process.argv command line arguments
+// Declare our repoOwner and repoName variables from command line arguments
 var repoOwner = process.argv[2];
 var repoName = process.argv[3];
 
-// Create getRepoContributors function with arguments repoOwner (user), repoName (project), and the callback function
+// Using an avatar URL as an input, output to a local file path
+function downloadImageByURL(url, filePath) {
+  request.get(url)
+    .on('error', function (err) {
+     throw err;
+    })
+    .on('response', function (response) {
+     console.log('Response Status Code: ', response.statusCode);
+    })
+    // Save the avatar images by piping the response stream to a directory
+    .pipe(fs.createWriteStream(filePath));
+}
+
+// Get a list of the repo contributors and call downloadImageByURL on each
 function getRepoContributors(repoOwner, repoName, cb) {
-  // process.env.GITHUB_USER is any reference to your username; an environmental variable in this case
   var GITHUB_USER = process.env.GITHUB_USER;
-  // process.env.GITHUB_ACCESS_TOKEN is any reference to your access token
   var GITHUB_TOKEN = process.env.GITHUB_ACCESS_TOKEN;
-  // Create our request URL using above variables
   var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
-  // Create a requestOptions object that is able to pass headers, including User-Agent (we got a 403 status code if we leave this out)
+  // User-Agent required in request headers, otherwise we get 403 status code
   var requestOptions = {
       headers: {
         'User-Agent': 'GitHub Avatar Downloader Exercise'
       }
   }
-
-  // Use request to make an HTTP GET to the generated URL
+  // Use request to make an HTTP GET request to the generated URL
   request(requestURL, requestOptions, function(err, response, body) {
-    // Exit without crashing if there is an error
     if (err) {
       throw err;
     }
-    // Parse the JSON data we get as a request response and hold it as an array variable
+    // data will be an array where each element is a contributor's metadata
     const data = JSON.parse(body);
-    // Each element in the array is a user's metadata. For each user,
     data.forEach(function(user) {
-      // Log the avatar of their URL
       console.log("Avatar URL for " + user.login + ": " + user.avatar_url);
-      // Use the downloadImageByURL function on the avatar URL, using a string with avatars directory, user.login string, and .png as a file path
       downloadImageByURL(user.avatar_url, './avatars/' + user.login + '.png');
     });
   });
 }
 
-// Using an avatar URL as an input, output to a local file path
-function downloadImageByURL(url, filePath) {
-  // Send a GET request
-  request.get(url)
-       // If there is an error, throw it and exit without crashing
-       .on('error', function (err) {
-         throw err;
-       })
-       // Report the status code of the response
-       .on('response', function (response) {
-         console.log('Response Status Code: ', response.statusCode);
-       })
-       // Pipe the response stream to our file path (avatars/ directory needs to exist first or this won't work)
-       .pipe(fs.createWriteStream(filePath));
-}
+console.log('Welcome to the GitHub Avatar Downloader!');
 
-// If either repoOwner or repoName are undefined, throw an error.
+// With all of our variables set, call getRepoContributors
 if (repoOwner === undefined || repoName === undefined) {
   console.log("Need both repo owner and repo name as arguments.");
   console.log("Use form: node download-avatars.js <repoowner> <reponame>");
 } else {
-  // Call getRepoContributors function with arguments repoOwner and repoName (from the command line), and a function to log an error and results
   getRepoContributors(repoOwner, repoName, function(err, result) {
     console.log("Errors:", err);
     console.log("Result:", result);

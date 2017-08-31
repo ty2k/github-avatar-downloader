@@ -1,42 +1,36 @@
 # GitHub Avatar Downloader
 
-## Problem Statement
+GitHub Avatar Downloader is an app that uses Node.js to consume the [GitHub REST API](https://developer.github.com/v3/) in order to download user avatars. It is coursework from [Lighthouse Labs](https://github.com/lighthouse-labs/).
 
-Given a GitHub repository name and owner, download all the contributors' profile images and save them to a subdirectory, `avatars/`.
+## Dependencies
 
-## Expected Usage
+- [dotenv](https://www.npmjs.com/package/dotenv) for accessing GitHub API keys
+- [fs](https://nodejs.org/api/fs.html) to save the avatars
+- [request](https://www.npmjs.com/package/request) for managing HTTP requests
 
-This program should be executed from the command line in the following manner,
+## Installation & Setup
+
+Clone this repository and `npm install` to install the dependencies.
+
+Prior to running, set your GitHub username and [GitHub access token](https://github.com/settings/tokens) in a `.env` file in the project directory, using the included `.env.example` as an example:
 
 ```
-node download_avatars.js jquery jquery
+GITHUB_USER=your_username_here
+GITHUB_ACCESS_TOKEN=your_token_here
 ```
 
-Any valid repo-owner + repo combination can be used, such as this:
+## Run
+
+Run the program using the format...
 
 ```
-node download_avatars.js nodejs node
+node download_avatars.js USER PROJECT
 ```
 
-## Functional Requirements
+... where `USER` is any valid user (like `ty2k`) and `PROJECT` is a project belonging to that user (like `github-avatar-downloader`).
 
-*As an* open source project leader,
-*I want* a folder with the avatars of all of my github project's contributors
-*so that* I can use them in a website.
+For instance: `node download_avatars.js jquery jquery`
 
-- *Given*
-  - I have node installed
-  - I am in the shell
-  - I have your file in my current folder
+## Contact the Author
 
-- *When*
-  - I execute your file using node, providing a github user and repository as command-line arguments For example: `$ node download_avatars.js nodejs node`
-
-- *Then*
-  - I should find a folder called `avatars` in my current directory
-  - The `avatars` folder should contain images corresponding to the avatars of the contributors of the repo
-  - The name of each image file should be the contributor's name and the file extension (ex. `johnny.png`)
-
-## Implementation Requirements
-- uses 'request' library to make the HTTP requests
-- uses git for version control
+[Tyler Krys](https://tylerkrys.ca) made this to learn about web development.

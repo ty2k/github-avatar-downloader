@@ -2,7 +2,7 @@
   "name": "github-avatar-downloader",
   "version": "1.0.0",
   "description": "A NodeJS exercise to download GitHub avatars",
-  "main": "index.js",
+  "main": "download-avatars.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +13,7 @@
   "keywords": [
     "github",
     "avatar",
-    "gravatar",
+    "javascript",
     "node",
     "request"
   ],
